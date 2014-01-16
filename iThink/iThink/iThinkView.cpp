@@ -19,6 +19,8 @@
 #include "BufferDC.h"
 #include <atlimage.h>
 
+#include "ListBaseQueue.h"
+
 // CiThinkView
 
 IMPLEMENT_DYNCREATE(CiThinkView, CView)
@@ -194,6 +196,33 @@ BOOL CiThinkView::OnCommand(WPARAM wParam, LPARAM lParam)
 		m_Game = ::FindWindow(_T("UnityWndClass"), NULL);
 	}
 
+	if (wParam == 1002)
+	{
+		// Queue의 생성 및 초기화 ///////
+		//Queue q;
+		CListBaseQueue q;
+		//QueueInit(&q);
+		q.QueueInit(&q);
+
+		// 데이터 넣기 ///////
+		/*Enqueue(&q, 1);  Enqueue(&q, 2);
+		Enqueue(&q, 3);  Enqueue(&q, 4);
+		Enqueue(&q, 5);*/
+		q.Enqueue(&q, 1); q.Enqueue(&q, 2);
+		q.Enqueue(&q, 3); q.Enqueue(&q, 4);
+		q.Enqueue(&q, 5);
+
+		// 데이터 꺼내기 ///////
+		/*while(!QIsEmpty(&q))
+		printf("%d ", Dequeue(&q));*/
+		while (!(q.QIsEmpty(&q)))
+		{
+			CString test;
+			test.Format(_T("%d\n"), q.Dequeue(&q));
+			TRACE(test);
+		}
+	}
+
 	BOOL res =  CView::OnCommand(wParam, lParam);
 
 	TRACE( L"- End CView::OnCommand() => %d\n", res);
@@ -315,7 +344,7 @@ int CiThinkView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	GetUserName(strAccount,&len);
 	m_Account.Format(_T("%s"), strAccount);
 
-	imageComment = Image::FromFile(L"C:\\Users\\gtgim\\Documents\\Visual Studio 2010\\Projects\\iThink\\iThink\\Comment.png");
+	imageComment = Image::FromFile(L"C:\\Users\\gtgim\\Documents\\Visual Studio 2010\\Projects\\iThink\\iThink\\Comment.png");	
 
 	return 0;
 }

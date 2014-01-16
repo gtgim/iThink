@@ -43,6 +43,7 @@
     <None Include="Delete.bmp">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="iThink.h">
@@ -69,6 +70,9 @@
     <ClInclude Include="BufferDC.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ListBaseQueue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="iThink.cpp">
@@ -87,6 +91,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BufferDC.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ListBaseQueue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

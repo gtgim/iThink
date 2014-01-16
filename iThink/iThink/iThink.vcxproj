@@ -97,6 +97,7 @@
     <None Include="Acquiring.bmp" />
     <None Include="ButtonClose.bmp" />
     <None Include="Calibration.bmp" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="Delete.bmp" />
     <None Include="ReadMe.txt" />
     <None Include="res\iThink.ico" />
@@ -110,6 +111,7 @@
     <ClInclude Include="iThink.h" />
     <ClInclude Include="iThinkDoc.h" />
     <ClInclude Include="iThinkView.h" />
+    <ClInclude Include="ListBaseQueue.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
@@ -120,6 +122,7 @@
     <ClCompile Include="iThink.cpp" />
     <ClCompile Include="iThinkDoc.cpp" />
     <ClCompile Include="iThinkView.cpp" />
+    <ClCompile Include="ListBaseQueue.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
