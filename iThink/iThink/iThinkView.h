@@ -17,6 +17,8 @@ using namespace Gdiplus;
 #pragma comment(lib, "C:\\Users\\gtgim\\Desktop\\examples\\lib\\edk.lib")
 #pragma comment(lib, "C:\\Users\\gtgim\\Desktop\\examples\\lib\\edk_utils.lib")
 
+#include "Cluster.h"
+
 #define USR_DEFWINPROC
 
 #define PI 3.1418
@@ -153,6 +155,7 @@ public:
 	void ControlGame(void);
 private:
 	float xmaxOld;
+	CCluster m_Cluster;
 };
 
 #ifndef _DEBUG  // iThinkView.cpp의 디버그 버전

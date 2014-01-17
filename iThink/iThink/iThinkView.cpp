@@ -19,7 +19,6 @@
 #include "BufferDC.h"
 #include <atlimage.h>
 
-#include "ListBaseQueue.h"
 
 // CiThinkView
 
@@ -194,33 +193,20 @@ BOOL CiThinkView::OnCommand(WPARAM wParam, LPARAM lParam)
 	{
 		::WinExec("C:\\Users\\gtgim\\Desktop\\test.exe", SW_SHOW);
 		m_Game = ::FindWindow(_T("UnityWndClass"), NULL);
+
+		return TRUE;
 	}
 
 	if (wParam == 1002)
 	{
-		// Queue의 생성 및 초기화 ///////
-		//Queue q;
-		CListBaseQueue q;
-		//QueueInit(&q);
-		q.QueueInit(&q);
-
-		// 데이터 넣기 ///////
-		/*Enqueue(&q, 1);  Enqueue(&q, 2);
-		Enqueue(&q, 3);  Enqueue(&q, 4);
-		Enqueue(&q, 5);*/
-		q.Enqueue(&q, 1); q.Enqueue(&q, 2);
-		q.Enqueue(&q, 3); q.Enqueue(&q, 4);
-		q.Enqueue(&q, 5);
-
-		// 데이터 꺼내기 ///////
-		/*while(!QIsEmpty(&q))
-		printf("%d ", Dequeue(&q));*/
-		while (!(q.QIsEmpty(&q)))
+		if (SetTimer(11,1000,NULL)!=11)
 		{
-			CString test;
-			test.Format(_T("%d\n"), q.Dequeue(&q));
-			TRACE(test);
+			AfxMessageBox(TEXT("ERROR:Failed to set timer!"));
 		}
+
+		srand((unsigned)time(NULL));
+
+		return TRUE;
 	}
 
 	BOOL res =  CView::OnCommand(wParam, lParam);
@@ -722,6 +708,68 @@ void CiThinkView::OnTimer(UINT_PTR nIDEvent)
 			m_FlagComment = 0;
 			KillTimer(10);
 			m_FlagTimeOld = 0;			
+		}
+	}
+
+	if (nIDEvent == 11)
+	{
+		// Queue의 생성 및 초기화 ///////
+		//Queue q;
+		/*CListBaseQueue q;
+		//QueueInit(&q);
+		q.QueueInit(&q);*/
+
+		// 데이터 넣기 ///////
+		/*Enqueue(&q, 1);  Enqueue(&q, 2);
+		Enqueue(&q, 3);  Enqueue(&q, 4);
+		Enqueue(&q, 5);*/
+		/*q.Enqueue(&q, 1); q.Enqueue(&q, 2);
+		q.Enqueue(&q, 3); q.Enqueue(&q, 4);
+		q.Enqueue(&q, 5);*/
+
+		// 데이터 꺼내기 ///////
+		/*while(!QIsEmpty(&q))
+		printf("%d ", Dequeue(&q));*/
+		/*while (!(q.QIsEmpty(&q)))
+		{
+			CString test;
+			test.Format(_T("%d\n"), q.Dequeue(&q));
+			TRACE(test);
+		}*/
+
+		if (m_FlagTimeOld == 0)
+		{
+			m_TimeOld = GetTickCount();
+			m_FlagTimeOld = 1;
+
+			m_Cluster.GetQueuePush()->QueueInit(m_Cluster.GetQueuePush());
+		}
+		DWORD timeNew = GetTickCount();
+
+		DWORD timeSeconds = (timeNew - m_TimeOld) / 1000;
+
+		if (timeSeconds < 10)
+		{
+			CUnit unitPush;
+			if (m_CGCAction == 2)
+			{
+				unitPush.SetValue(m_CGCActionPower);
+			}
+			unitPush.SetTimeSeconds(timeSeconds);
+
+			m_Cluster.GetQueuePush()->Enqueue(m_Cluster.GetQueuePush(), unitPush);
+		}
+		else
+		{
+			while (!(m_Cluster.GetQueuePush()->QIsEmpty(m_Cluster.GetQueuePush())))
+			{
+				CString test;
+				test.Format(_T("%d\n"), m_Cluster.GetQueuePush()->Dequeue(m_Cluster.GetQueuePush()).GetValue());
+				TRACE(test);
+			}
+
+			KillTimer(11);
+			m_FlagTimeOld = 0;
 		}
 	}
 

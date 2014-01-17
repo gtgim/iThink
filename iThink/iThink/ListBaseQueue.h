@@ -1,6 +1,8 @@
 #pragma once
 
-typedef int Data;
+#include "Unit.h"
+
+typedef CUnit Data;
 
 class CNode
 {
