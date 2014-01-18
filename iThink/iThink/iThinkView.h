@@ -156,6 +156,11 @@ public:
 private:
 	float xmaxOld;
 	CCluster m_Cluster;
+public:
+	void logAffectivScore(EmoStateHandle  eState);
+	void CaculateScale(double& rawScore, double& maxScale, double& minScale, double& scaledScore);
+private:
+	double m_ScaledScore;
 };
 
 #ifndef _DEBUG  // iThinkView.cpp의 디버그 버전

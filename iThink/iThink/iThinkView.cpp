@@ -56,6 +56,7 @@ CiThinkView::CiThinkView()
 	, m_FlagComment(0)
 	, m_FlagSetCognitiv(0)
 	, xmaxOld(0)
+	, m_ScaledScore(0)
 {
 	// TODO: 여기에 생성 코드를 추가합니다.
 	m_stWinMove = 0;
@@ -503,6 +504,8 @@ void CiThinkView::Emotiv(void)
 
 			m_CGCAction = static_cast<int>(ES_CognitivGetCurrentAction(eState));
 			m_CGCActionPower = static_cast<int>(ES_CognitivGetCurrentActionPower(eState)*100.0f);
+
+			logAffectivScore(eState);
 		}
 		if (eventType == EE_CognitivEvent)
 		{
@@ -743,6 +746,7 @@ void CiThinkView::OnTimer(UINT_PTR nIDEvent)
 			m_FlagTimeOld = 1;
 
 			m_Cluster.GetQueuePush()->QueueInit(m_Cluster.GetQueuePush());
+			m_Cluster.GetQueueExcitement()->QueueInit(m_Cluster.GetQueueExcitement());
 		}
 		DWORD timeNew = GetTickCount();
 
@@ -753,18 +757,33 @@ void CiThinkView::OnTimer(UINT_PTR nIDEvent)
 			CUnit unitPush;
 			if (m_CGCAction == 2)
 			{
-				unitPush.SetValue(m_CGCActionPower);
+				unitPush.SetValue(m_CGCActionPower);				
 			}
 			unitPush.SetTimeSeconds(timeSeconds);
 
 			m_Cluster.GetQueuePush()->Enqueue(m_Cluster.GetQueuePush(), unitPush);
+
+			CUnit unitExcitement;
+			unitExcitement.SetValue(m_ScaledScore);
+			unitExcitement.SetTimeSeconds(timeSeconds);
+
+			m_Cluster.GetQueueExcitement()->Enqueue(m_Cluster.GetQueueExcitement(), unitExcitement);
 		}
 		else
 		{
 			while (!(m_Cluster.GetQueuePush()->QIsEmpty(m_Cluster.GetQueuePush())))
 			{
 				CString test;
-				test.Format(_T("%d\n"), m_Cluster.GetQueuePush()->Dequeue(m_Cluster.GetQueuePush()).GetValue());
+				test.Format(_T("%lf\n"), m_Cluster.GetQueuePush()->Dequeue(m_Cluster.GetQueuePush()).GetValue());
+				TRACE(test);
+			}
+
+			TRACE("^^\n");
+
+			while (!(m_Cluster.GetQueueExcitement()->QIsEmpty(m_Cluster.GetQueueExcitement())))
+			{
+				CString test;
+				test.Format(_T("%lf\n"), m_Cluster.GetQueueExcitement()->Dequeue(m_Cluster.GetQueueExcitement()).GetValue());
 				TRACE(test);
 			}
 
@@ -837,4 +856,41 @@ void CiThinkView::ControlGame(void)
 	}
 
 	xmaxOld = xmax;
+}
+
+
+void CiThinkView::logAffectivScore(EmoStateHandle  eState)
+{
+	// Affectiv results
+	double rawScore=0;
+	double minScale=0;
+	double maxScale=0;	
+	double scaledScore=0;
+
+	ES_AffectivGetExcitementShortTermModelParams(eState,&rawScore,&minScale,&maxScale);
+	if (minScale==maxScale)
+	{
+		//os << "undefined" << ",";
+	}
+	else{
+		CaculateScale(rawScore,maxScale, minScale,scaledScore);
+		//os << scaledScore << ",";
+
+		m_ScaledScore = scaledScore;
+	}
+}
+
+
+void CiThinkView::CaculateScale(double& rawScore, double& maxScale, double& minScale, double& scaledScore)
+{
+	if (rawScore<minScale)
+	{
+		scaledScore =0;
+	}else if (rawScore>maxScale)
+	{
+		scaledScore = 1;
+	}
+	else{
+		scaledScore = (rawScore-minScale)/(maxScale-minScale);
+	}
 }
