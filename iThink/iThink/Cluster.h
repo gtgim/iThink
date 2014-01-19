@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ListBaseQueue.h"
+#include "Unit.h"
 
 class CCluster
 {
@@ -13,5 +14,13 @@ private:
 public:
 	CListBaseQueue* GetQueueExcitement(void);
 	CListBaseQueue* GetQueuePush(void);
+private:
+	int m_CountIndexQueuePush;
+	CUnit* m_DynamicArrayPush;
+public:
+	void SetCountIndexQueuePush(int countIndexQueuePush);
+	void NewDynamicArrayPush(void);
+	void DeleteDynamicArrayPush(void);
+	void SetDynamicArrayPush(void);
 };
 

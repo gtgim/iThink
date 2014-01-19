@@ -771,7 +771,7 @@ void CiThinkView::OnTimer(UINT_PTR nIDEvent)
 		}
 		else
 		{
-			while (!(m_Cluster.GetQueuePush()->QIsEmpty(m_Cluster.GetQueuePush())))
+			/*while (!(m_Cluster.GetQueuePush()->QIsEmpty(m_Cluster.GetQueuePush())))
 			{
 				CString test;
 				test.Format(_T("%lf\n"), m_Cluster.GetQueuePush()->Dequeue(m_Cluster.GetQueuePush()).GetValue());
@@ -785,7 +785,12 @@ void CiThinkView::OnTimer(UINT_PTR nIDEvent)
 				CString test;
 				test.Format(_T("%lf\n"), m_Cluster.GetQueueExcitement()->Dequeue(m_Cluster.GetQueueExcitement()).GetValue());
 				TRACE(test);
-			}
+			}*/
+
+			m_Cluster.SetCountIndexQueuePush(10);
+			m_Cluster.NewDynamicArrayPush();			
+			m_Cluster.SetDynamicArrayPush();
+			m_Cluster.DeleteDynamicArrayPush();
 
 			KillTimer(11);
 			m_FlagTimeOld = 0;
