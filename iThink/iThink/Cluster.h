@@ -22,5 +22,10 @@ public:
 	void NewDynamicArrayPush(void);
 	void DeleteDynamicArrayPush(void);
 	void SetDynamicArrayPush(void);
+private:
+	CUnit m_UnitClassOne;
+	CUnit m_UnitClassTwo;
+public:
+	void SetUnitClass(void);
 };
 

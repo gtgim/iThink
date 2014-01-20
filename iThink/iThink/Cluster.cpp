@@ -56,3 +56,32 @@ void CCluster::SetDynamicArrayPush(void)
 		m_QueuePush.Enqueue(GetQueuePush(), m_DynamicArrayPush[i]);
 	}
 }
+
+
+void CCluster::SetUnitClass(void)
+{
+	CUnit unitExcitement;
+	CUnit unitPush;
+
+	for (int i=0;i<m_CountIndexQueuePush;i++)
+	{
+		if (!(m_QueuePush.QIsEmpty(GetQueuePush())) && !(m_QueueExcitement.QIsEmpty(GetQueueExcitement())))
+		{
+			unitExcitement = m_QueueExcitement.Dequeue(GetQueueExcitement());
+			unitPush = m_QueuePush.Dequeue(GetQueuePush());			
+
+			if (unitExcitement.GetValue() > 0 && unitPush.GetValue() > 50)
+			{
+				m_UnitClassTwo = unitPush;
+			}
+
+			if (unitExcitement.GetValue() == 0 && unitPush.GetValue() <= 50)
+			{
+				m_UnitClassOne = unitPush;
+			}
+		}		
+
+		m_QueueExcitement.Enqueue(GetQueueExcitement(), unitExcitement);
+		m_QueuePush.Enqueue(GetQueuePush(), unitPush);
+	}
+}
