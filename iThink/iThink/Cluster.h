@@ -27,5 +27,10 @@ private:
 	CUnit m_UnitClassTwo;
 public:
 	void SetUnitClass(void);
+private:
+	CListBaseQueue m_QueueDistanceClassOne;
+	CListBaseQueue m_QueueDistanceClassTwo;
+public:
+	void EuclideanDistance(void);
 };
 

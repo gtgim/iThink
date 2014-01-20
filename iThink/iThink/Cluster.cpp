@@ -1,6 +1,7 @@
 #include "StdAfx.h"
 #include "Cluster.h"
 
+#include <cmath>
 
 CCluster::CCluster(void)
 	: m_CountIndexQueuePush(0)
@@ -83,5 +84,36 @@ void CCluster::SetUnitClass(void)
 
 		m_QueueExcitement.Enqueue(GetQueueExcitement(), unitExcitement);
 		m_QueuePush.Enqueue(GetQueuePush(), unitPush);
+	}
+}
+
+
+void CCluster::EuclideanDistance(void)
+{
+	CUnit unitDistanceClassOne;
+	CUnit unitDistanceClassTwo;
+
+	m_QueueDistanceClassOne.QueueInit(&m_QueueDistanceClassOne);
+	m_QueueDistanceClassTwo.QueueInit(&m_QueueDistanceClassTwo);
+
+	for (int i=0;i<m_CountIndexQueuePush;i++)
+	{
+		unitDistanceClassOne.SetValue(
+			sqrt(
+			pow(m_UnitClassOne.GetValue() - m_DynamicArrayPush[i].GetValue(), 2) + 
+			powl((long double)m_UnitClassOne.GetTimeSeconds() - m_DynamicArrayPush[i].GetTimeSeconds(), 2)
+			)
+		);
+
+		m_QueueDistanceClassOne.Enqueue(&m_QueueDistanceClassOne, unitDistanceClassOne);
+
+		unitDistanceClassTwo.SetValue(
+			sqrt(
+			pow(m_UnitClassTwo.GetValue() - m_DynamicArrayPush[i].GetValue(), 2) + 
+			powl((long double)m_UnitClassTwo.GetTimeSeconds() - m_DynamicArrayPush[i].GetTimeSeconds(), 2)
+			)
+		);
+
+		m_QueueDistanceClassTwo.Enqueue(&m_QueueDistanceClassTwo, unitDistanceClassTwo);
 	}
 }
