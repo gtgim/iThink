@@ -793,6 +793,7 @@ void CiThinkView::OnTimer(UINT_PTR nIDEvent)
 			m_Cluster.SetUnitClass();
 			m_Cluster.EuclideanDistance();
 			m_Cluster.DeleteDynamicArrayPush();
+			m_Cluster.SetQueueGroupClass();
 
 			KillTimer(11);
 			m_FlagTimeOld = 0;

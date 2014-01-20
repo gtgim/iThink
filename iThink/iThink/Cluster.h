@@ -32,5 +32,10 @@ private:
 	CListBaseQueue m_QueueDistanceClassTwo;
 public:
 	void EuclideanDistance(void);
+private:
+	CListBaseQueue m_QueueGroupClassOne;
+	CListBaseQueue m_QueueGroupClassTwo;
+public:
+	void SetQueueGroupClass(void);
 };
 

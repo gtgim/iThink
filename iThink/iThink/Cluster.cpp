@@ -117,3 +117,39 @@ void CCluster::EuclideanDistance(void)
 		m_QueueDistanceClassTwo.Enqueue(&m_QueueDistanceClassTwo, unitDistanceClassTwo);
 	}
 }
+
+
+void CCluster::SetQueueGroupClass(void)
+{
+	CUnit unitDistanceClassOne;
+	CUnit unitDistanceClassTwo;
+
+	CUnit unitGroupClassOne;
+	CUnit unitGroupClassTwo;
+
+	m_QueueGroupClassOne.QueueInit(&m_QueueGroupClassOne);
+	m_QueueGroupClassTwo.QueueInit(&m_QueueGroupClassTwo);
+
+	for (int i=0;i<m_CountIndexQueuePush;i++)
+	{
+		if (!(m_QueueDistanceClassOne.QIsEmpty(&m_QueueDistanceClassOne)) && !(m_QueueDistanceClassTwo.QIsEmpty(&m_QueueDistanceClassTwo)))
+		{
+			unitDistanceClassOne = m_QueueDistanceClassOne.Dequeue(&m_QueueDistanceClassOne);
+			unitDistanceClassTwo = m_QueueDistanceClassTwo.Dequeue(&m_QueueDistanceClassTwo);
+
+			if (unitDistanceClassOne.GetValue() > unitDistanceClassTwo.GetValue())
+			{
+				unitGroupClassOne.SetValue(i);
+
+				m_QueueGroupClassOne.Enqueue(&m_QueueGroupClassOne, unitGroupClassOne);
+			}
+
+			if (unitDistanceClassOne.GetValue() < unitDistanceClassTwo.GetValue())
+			{
+				unitGroupClassTwo.SetValue(i);
+
+				m_QueueGroupClassTwo.Enqueue(&m_QueueGroupClassTwo, unitGroupClassTwo);
+			}
+		}		
+	}
+}
