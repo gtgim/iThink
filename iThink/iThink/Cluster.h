@@ -37,5 +37,13 @@ private:
 	CListBaseQueue m_QueueGroupClassTwo;
 public:
 	void SetQueueGroupClass(void);
+private:
+	CUnit m_UnitNewClassOne;
+	CUnit m_UnitNewClassTwo;
+public:
+	void SetUnitNewClass(void);
+private:
+	int m_CountIndexQueueGroupClassOne;
+	int m_CountIndexQueueGroupClassTwo;
 };
 

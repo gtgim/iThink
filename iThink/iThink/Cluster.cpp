@@ -6,6 +6,8 @@
 CCluster::CCluster(void)
 	: m_CountIndexQueuePush(0)
 	, m_DynamicArrayPush(NULL)
+	, m_CountIndexQueueGroupClassOne(0)
+	, m_CountIndexQueueGroupClassTwo(0)
 {
 }
 
@@ -142,6 +144,8 @@ void CCluster::SetQueueGroupClass(void)
 				unitGroupClassOne.SetValue(i);
 
 				m_QueueGroupClassOne.Enqueue(&m_QueueGroupClassOne, unitGroupClassOne);
+
+				m_CountIndexQueueGroupClassOne++;
 			}
 
 			if (unitDistanceClassOne.GetValue() < unitDistanceClassTwo.GetValue())
@@ -149,7 +153,49 @@ void CCluster::SetQueueGroupClass(void)
 				unitGroupClassTwo.SetValue(i);
 
 				m_QueueGroupClassTwo.Enqueue(&m_QueueGroupClassTwo, unitGroupClassTwo);
+
+				m_CountIndexQueueGroupClassTwo++;
 			}
 		}		
 	}
+}
+
+
+void CCluster::SetUnitNewClass(void)
+{
+	int valueQueueGroupClassOne;
+	double caseOneSumValueDynamicArrayPush = 0.0;
+	DWORD caseOneSumTimeSecondsDynamicArrayPush = 0;
+
+	int valueQueueGroupClassTwo;
+	double caseTwoSumValueDynamicArrayPush = 0.0;
+	DWORD caseTwoSumTimeSecondsDynamicArrayPush = 0;
+	
+	for (int i=0;i<m_CountIndexQueueGroupClassOne;i++)
+	{
+		if (!(m_QueueGroupClassOne.QIsEmpty(&m_QueueGroupClassOne)))
+		{
+			valueQueueGroupClassOne = m_QueueGroupClassOne.Dequeue(&m_QueueGroupClassOne).GetValue();
+
+			caseOneSumValueDynamicArrayPush += m_DynamicArrayPush[valueQueueGroupClassOne].GetValue();
+			caseOneSumTimeSecondsDynamicArrayPush += m_DynamicArrayPush[valueQueueGroupClassOne].GetTimeSeconds();
+		}		
+	}
+
+	for (int i=0;i<m_CountIndexQueueGroupClassTwo;i++)
+	{
+		if (!(m_QueueGroupClassTwo.QIsEmpty(&m_QueueGroupClassTwo)))
+		{
+			valueQueueGroupClassTwo = m_QueueGroupClassTwo.Dequeue(&m_QueueGroupClassTwo).GetValue();
+
+			caseTwoSumValueDynamicArrayPush += m_DynamicArrayPush[valueQueueGroupClassTwo].GetValue();
+			caseTwoSumTimeSecondsDynamicArrayPush += m_DynamicArrayPush[valueQueueGroupClassTwo].GetTimeSeconds();
+		}		
+	}
+	
+	m_UnitNewClassOne.SetValue(caseOneSumValueDynamicArrayPush / m_CountIndexQueueGroupClassOne);
+	m_UnitNewClassOne.SetTimeSeconds(caseOneSumTimeSecondsDynamicArrayPush / m_CountIndexQueueGroupClassOne);
+
+	m_UnitNewClassTwo.SetValue(caseTwoSumValueDynamicArrayPush / m_CountIndexQueueGroupClassTwo);
+	m_UnitNewClassTwo.SetTimeSeconds(caseTwoSumTimeSecondsDynamicArrayPush / m_CountIndexQueueGroupClassTwo);
 }
