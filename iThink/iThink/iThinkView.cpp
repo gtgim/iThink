@@ -768,13 +768,13 @@ void CiThinkView::OnTimer(UINT_PTR nIDEvent)
 			{
 				unitPush.SetValue(m_CGCActionPower);				
 			}
-			unitPush.SetTimeSeconds(timeSeconds);
+			unitPush.SetTimeSeconds(timeSeconds-9);
 
 			m_Cluster.GetQueuePush()->Enqueue(m_Cluster.GetQueuePush(), unitPush);
 
 			CUnit unitExcitement;
 			unitExcitement.SetValue(m_ScaledScore);
-			unitExcitement.SetTimeSeconds(timeSeconds);
+			unitExcitement.SetTimeSeconds(timeSeconds-9);
 
 			m_Cluster.GetQueueExcitement()->Enqueue(m_Cluster.GetQueueExcitement(), unitExcitement);
 
