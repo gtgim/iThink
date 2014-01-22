@@ -8,6 +8,8 @@ CCluster::CCluster(void)
 	, m_DynamicArrayPush(NULL)
 	, m_CountIndexQueueGroupClassOne(0)
 	, m_CountIndexQueueGroupClassTwo(0)
+	, m_FlagKMeans(0)
+	, m_LevelSensitivity(0)
 {
 }
 
@@ -163,10 +165,12 @@ void CCluster::SetQueueGroupClass(void)
 
 void CCluster::SetUnitNewClass(void)
 {
+	CUnit unitGroupClassOne;
 	int valueQueueGroupClassOne;
 	double caseOneSumValueDynamicArrayPush = 0.0;
 	DWORD caseOneSumTimeSecondsDynamicArrayPush = 0;
 
+	CUnit unitGroupClassTwo;
 	int valueQueueGroupClassTwo;
 	double caseTwoSumValueDynamicArrayPush = 0.0;
 	DWORD caseTwoSumTimeSecondsDynamicArrayPush = 0;
@@ -175,10 +179,14 @@ void CCluster::SetUnitNewClass(void)
 	{
 		if (!(m_QueueGroupClassOne.QIsEmpty(&m_QueueGroupClassOne)))
 		{
-			valueQueueGroupClassOne = m_QueueGroupClassOne.Dequeue(&m_QueueGroupClassOne).GetValue();
+			unitGroupClassOne = m_QueueGroupClassOne.Dequeue(&m_QueueGroupClassOne);
+
+			valueQueueGroupClassOne = unitGroupClassOne.GetValue();
 
 			caseOneSumValueDynamicArrayPush += m_DynamicArrayPush[valueQueueGroupClassOne].GetValue();
 			caseOneSumTimeSecondsDynamicArrayPush += m_DynamicArrayPush[valueQueueGroupClassOne].GetTimeSeconds();
+
+			m_QueueGroupClassOne.Enqueue(&m_QueueGroupClassOne, unitGroupClassOne);
 		}		
 	}
 
@@ -186,10 +194,14 @@ void CCluster::SetUnitNewClass(void)
 	{
 		if (!(m_QueueGroupClassTwo.QIsEmpty(&m_QueueGroupClassTwo)))
 		{
-			valueQueueGroupClassTwo = m_QueueGroupClassTwo.Dequeue(&m_QueueGroupClassTwo).GetValue();
+			unitGroupClassTwo = m_QueueGroupClassTwo.Dequeue(&m_QueueGroupClassTwo);
+
+			valueQueueGroupClassTwo = unitGroupClassTwo.GetValue();
 
 			caseTwoSumValueDynamicArrayPush += m_DynamicArrayPush[valueQueueGroupClassTwo].GetValue();
 			caseTwoSumTimeSecondsDynamicArrayPush += m_DynamicArrayPush[valueQueueGroupClassTwo].GetTimeSeconds();
+
+			m_QueueGroupClassTwo.Enqueue(&m_QueueGroupClassTwo, unitGroupClassTwo);
 		}		
 	}
 	
@@ -198,4 +210,55 @@ void CCluster::SetUnitNewClass(void)
 
 	m_UnitNewClassTwo.SetValue(caseTwoSumValueDynamicArrayPush / m_CountIndexQueueGroupClassTwo);
 	m_UnitNewClassTwo.SetTimeSeconds(caseTwoSumTimeSecondsDynamicArrayPush / m_CountIndexQueueGroupClassTwo);
+}
+
+
+void CCluster::CompareClass(void)
+{
+	if (
+		(int)m_UnitClassOne.GetValue() == (int)m_UnitNewClassOne.GetValue() &&
+		m_UnitClassOne.GetTimeSeconds() == m_UnitNewClassOne.GetTimeSeconds() &&
+		(int)m_UnitClassTwo.GetValue() == (int)m_UnitNewClassTwo.GetValue() &&
+		m_UnitClassTwo.GetTimeSeconds() == m_UnitNewClassTwo.GetTimeSeconds()
+		)
+	{
+		m_FlagKMeans = 1;
+	}
+	else
+	{
+		m_UnitClassOne = m_UnitNewClassOne;
+		m_UnitClassTwo = m_UnitNewClassTwo;
+	}
+}
+
+
+void CCluster::KMeans(DWORD timeSeconds)
+{
+	SetCountIndexQueuePush(timeSeconds);
+	NewDynamicArrayPush();			
+	SetDynamicArrayPush();
+	SetUnitClass();
+
+	for (int i=0;i<timeSeconds;i++)
+	{
+		EuclideanDistance();			
+		SetQueueGroupClass();
+		SetUnitNewClass();
+		CompareClass();
+	}	
+
+	SetLevelSensitivity();
+	DeleteDynamicArrayPush();
+}
+
+
+void CCluster::SetLevelSensitivity(void)
+{
+	//
+}
+
+
+int CCluster::GetLevelSensitivity(void)
+{
+	return m_LevelSensitivity;
 }

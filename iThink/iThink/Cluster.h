@@ -45,5 +45,16 @@ public:
 private:
 	int m_CountIndexQueueGroupClassOne;
 	int m_CountIndexQueueGroupClassTwo;
+public:
+	void CompareClass(void);
+private:
+	int m_FlagKMeans;
+public:
+	void KMeans(DWORD timeSeconds);
+private:
+	int m_LevelSensitivity;
+public:
+	void SetLevelSensitivity(void);
+	int GetLevelSensitivity(void);
 };
 

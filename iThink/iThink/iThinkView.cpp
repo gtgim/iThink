@@ -57,6 +57,7 @@ CiThinkView::CiThinkView()
 	, m_FlagSetCognitiv(0)
 	, xmaxOld(0)
 	, m_ScaledScore(0)
+	, m_SelectButton(0)
 {
 	// TODO: 여기에 생성 코드를 추가합니다.
 	m_stWinMove = 0;
@@ -180,10 +181,24 @@ BOOL CiThinkView::OnCommand(WPARAM wParam, LPARAM lParam)
 
 	if (wParam == 1004)
 	{
-		if (SetTimer(10,1000,NULL)!=10)
+		if (m_SelectButton == 0)
 		{
-			AfxMessageBox(TEXT("ERROR:Failed to set timer!"));
+			//AfxMessageBox(_T("10"));
+
+			if (SetTimer(10,1000,NULL)!=10)
+			{
+				AfxMessageBox(TEXT("ERROR:Failed to set timer!"));
+			}
 		}
+		if (m_SelectButton == 1)
+		{
+			//AfxMessageBox(_T("11"));
+
+			if (SetTimer(11,1000,NULL)!=11)
+			{
+				AfxMessageBox(TEXT("ERROR:Failed to set timer!"));
+			}
+		}	
 
 		srand((unsigned)time(NULL));
 
@@ -200,12 +215,14 @@ BOOL CiThinkView::OnCommand(WPARAM wParam, LPARAM lParam)
 
 	if (wParam == 1002)
 	{
-		if (SetTimer(11,1000,NULL)!=11)
-		{
-			AfxMessageBox(TEXT("ERROR:Failed to set timer!"));
-		}
+		m_SelectButton = 1;
 
-		srand((unsigned)time(NULL));
+		return TRUE;
+	}
+
+	if (wParam == 1001)
+	{
+		m_SelectButton = 0;
 
 		return TRUE;
 	}
@@ -480,7 +497,19 @@ void CiThinkView::OnPaint()
 	if (m_FlagComment == 7)
 	{
 		m_Comment.Format(_T("Pull data is acquired.\n\nPlease wait a moment."));
-	}	
+	}
+	if (m_FlagComment == 8)
+	{
+		m_Comment.Format(_T("After a while, iThink will calibrate\nCognitiv data."));
+	}
+	if (m_FlagComment == 9)
+	{
+		m_Comment.Format(_T("iThink calibrate Cognitiv data.\n\nConcentrate at 10 Seconds."));
+	}
+	if (m_FlagComment == 10)
+	{
+		m_Comment.Format(_T("Calibration is complete.\nPlease wait a moment."));
+	}
 	graphics.DrawString(m_Comment, -1, &F, PointF(400,215), &B);
 }
 
@@ -716,30 +745,6 @@ void CiThinkView::OnTimer(UINT_PTR nIDEvent)
 
 	if (nIDEvent == 11)
 	{
-		// Queue의 생성 및 초기화 ///////
-		//Queue q;
-		/*CListBaseQueue q;
-		//QueueInit(&q);
-		q.QueueInit(&q);*/
-
-		// 데이터 넣기 ///////
-		/*Enqueue(&q, 1);  Enqueue(&q, 2);
-		Enqueue(&q, 3);  Enqueue(&q, 4);
-		Enqueue(&q, 5);*/
-		/*q.Enqueue(&q, 1); q.Enqueue(&q, 2);
-		q.Enqueue(&q, 3); q.Enqueue(&q, 4);
-		q.Enqueue(&q, 5);*/
-
-		// 데이터 꺼내기 ///////
-		/*while(!QIsEmpty(&q))
-		printf("%d ", Dequeue(&q));*/
-		/*while (!(q.QIsEmpty(&q)))
-		{
-			CString test;
-			test.Format(_T("%d\n"), q.Dequeue(&q));
-			TRACE(test);
-		}*/
-
 		if (m_FlagTimeOld == 0)
 		{
 			m_TimeOld = GetTickCount();
@@ -752,7 +757,11 @@ void CiThinkView::OnTimer(UINT_PTR nIDEvent)
 
 		DWORD timeSeconds = (timeNew - m_TimeOld) / 1000;
 
-		if (timeSeconds < 10)
+		if (timeSeconds >= 0 && timeSeconds <= 8)
+		{
+			m_FlagComment = 8;
+		}
+		if (timeSeconds >= 9 && timeSeconds <= 19)
 		{
 			CUnit unitPush;
 			if (m_CGCAction == 2)
@@ -768,36 +777,22 @@ void CiThinkView::OnTimer(UINT_PTR nIDEvent)
 			unitExcitement.SetTimeSeconds(timeSeconds);
 
 			m_Cluster.GetQueueExcitement()->Enqueue(m_Cluster.GetQueueExcitement(), unitExcitement);
+
+
+			m_FlagComment = 9;
 		}
-		else
+		if (timeSeconds >= 20 && timeSeconds <= 28)
 		{
-			/*while (!(m_Cluster.GetQueuePush()->QIsEmpty(m_Cluster.GetQueuePush())))
-			{
-				CString test;
-				test.Format(_T("%lf\n"), m_Cluster.GetQueuePush()->Dequeue(m_Cluster.GetQueuePush()).GetValue());
-				TRACE(test);
-			}
-
-			TRACE("^^\n");
-
-			while (!(m_Cluster.GetQueueExcitement()->QIsEmpty(m_Cluster.GetQueueExcitement())))
-			{
-				CString test;
-				test.Format(_T("%lf\n"), m_Cluster.GetQueueExcitement()->Dequeue(m_Cluster.GetQueueExcitement()).GetValue());
-				TRACE(test);
-			}*/
-
-			m_Cluster.SetCountIndexQueuePush(10);
-			m_Cluster.NewDynamicArrayPush();			
-			m_Cluster.SetDynamicArrayPush();
-			m_Cluster.SetUnitClass();
-			m_Cluster.EuclideanDistance();			
-			m_Cluster.SetQueueGroupClass();
-			m_Cluster.SetUnitNewClass();
-			m_Cluster.DeleteDynamicArrayPush();
+			m_FlagComment = 10;
+		}		
+		if (timeSeconds >= 29 && timeSeconds <= 37)
+		{
+			m_Cluster.KMeans(10);
 
 			KillTimer(11);
 			m_FlagTimeOld = 0;
+
+			m_FlagComment = 0;
 		}
 	}
 

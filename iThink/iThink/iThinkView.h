@@ -161,6 +161,7 @@ public:
 	void CaculateScale(double& rawScore, double& maxScale, double& minScale, double& scaledScore);
 private:
 	double m_ScaledScore;
+	int m_SelectButton;
 };
 
 #ifndef _DEBUG  // iThinkView.cpp의 디버그 버전
