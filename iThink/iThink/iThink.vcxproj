@@ -99,6 +99,9 @@
     <None Include="Calibration.bmp" />
     <None Include="ClassDiagram1.cd" />
     <None Include="Delete.bmp" />
+    <None Include="FocusCalibration.bmp" />
+    <None Include="FocusStart.bmp" />
+    <None Include="FocusTraining.bmp" />
     <None Include="ReadMe.txt" />
     <None Include="res\iThink.ico" />
     <None Include="res\iThink.rc2" />

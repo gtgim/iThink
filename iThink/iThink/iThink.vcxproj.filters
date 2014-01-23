@@ -44,6 +44,15 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="ClassDiagram1.cd" />
+    <None Include="FocusTraining.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="FocusCalibration.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="FocusStart.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="iThink.h">

@@ -59,6 +59,7 @@ CiThinkView::CiThinkView()
 	, m_ScaledScore(0)
 	, m_SelectButton(0)
 	, m_TimeSeconds(0)
+	, m_FlagButtonTraining(0)
 {
 	// TODO: 여기에 생성 코드를 추가합니다.
 	m_stWinMove = 0;
@@ -184,6 +185,8 @@ BOOL CiThinkView::OnCommand(WPARAM wParam, LPARAM lParam)
 	{
 		if (m_SelectButton == 0)
 		{
+			m_ButtonTraining.SetFocus();
+
 			//AfxMessageBox(_T("10"));
 
 			if (SetTimer(10,1000,NULL)!=10)
@@ -193,6 +196,8 @@ BOOL CiThinkView::OnCommand(WPARAM wParam, LPARAM lParam)
 		}
 		if (m_SelectButton == 1)
 		{
+			m_ButtonCalibration.SetFocus();
+
 			//AfxMessageBox(_T("11"));
 
 			if (SetTimer(11,1000,NULL)!=11)
@@ -295,15 +300,15 @@ int CiThinkView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	m_ButtonTraining.Create(NULL, WS_CHILD|WS_VISIBLE|BS_OWNERDRAW, 
 		CRect(10,10,110,60), this, 1001);
-	m_ButtonTraining.LoadBitmaps(IDB_BITMAP2,IDB_BITMAP2,IDB_BITMAP2,IDB_BITMAP2);
+	m_ButtonTraining.LoadBitmaps(IDB_BITMAP2,IDB_BITMAP2,IDB_BITMAP7,IDB_BITMAP2);
 
 	m_ButtonCalibration.Create(NULL, WS_CHILD|WS_VISIBLE|BS_OWNERDRAW, 
 		CRect(120,10,220,60), this, 1002);
-	m_ButtonCalibration.LoadBitmaps(IDB_BITMAP3,IDB_BITMAP3,IDB_BITMAP3,IDB_BITMAP3);
+	m_ButtonCalibration.LoadBitmaps(IDB_BITMAP3,IDB_BITMAP3,IDB_BITMAP8,IDB_BITMAP3);
 
 	m_ButtonStart.Create(NULL, WS_CHILD|WS_VISIBLE|BS_OWNERDRAW, 
 		CRect(230,10,330,60), this, 1003);
-	m_ButtonStart.LoadBitmaps(IDB_BITMAP4,IDB_BITMAP4,IDB_BITMAP4,IDB_BITMAP4);
+	m_ButtonStart.LoadBitmaps(IDB_BITMAP4,IDB_BITMAP9,IDB_BITMAP4,IDB_BITMAP4);
 
 	m_ButtonAcquiring.Create(NULL, WS_CHILD|WS_VISIBLE|BS_OWNERDRAW, 
 		CRect(740,510,840,560), this, 1004);
@@ -349,7 +354,9 @@ int CiThinkView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	GetUserName(strAccount,&len);
 	m_Account.Format(_T("%s"), strAccount);
 
-	imageComment = Image::FromFile(L"C:\\Users\\gtgim\\Documents\\Visual Studio 2010\\Projects\\iThink\\iThink\\Comment.png");	
+	imageComment = Image::FromFile(L"C:\\Users\\gtgim\\Documents\\Visual Studio 2010\\Projects\\iThink\\iThink\\Comment.png");
+
+	m_FlagButtonTraining = 1;
 
 	return 0;
 }
@@ -539,6 +546,12 @@ void CiThinkView::OnPaint()
 		m_Comment.Format(_T("Calibration is complete.\nPlease wait a moment."));
 	}
 	graphics.DrawString(m_Comment, -1, &F, PointF(400,215), &B);
+
+	if (m_FlagButtonTraining == 1)
+	{
+		m_ButtonTraining.SetFocus();
+		m_FlagButtonTraining = 0;
+	}
 }
 
 
