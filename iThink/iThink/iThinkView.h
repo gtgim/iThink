@@ -162,6 +162,7 @@ public:
 private:
 	double m_ScaledScore;
 	int m_SelectButton;
+	DWORD m_TimeSeconds;
 };
 
 #ifndef _DEBUG  // iThinkView.cpp의 디버그 버전

@@ -58,6 +58,7 @@ CiThinkView::CiThinkView()
 	, xmaxOld(0)
 	, m_ScaledScore(0)
 	, m_SelectButton(0)
+	, m_TimeSeconds(0)
 {
 	// TODO: 여기에 생성 코드를 추가합니다.
 	m_stWinMove = 0;
@@ -466,6 +467,9 @@ void CiThinkView::OnPaint()
 	}
 
 	graphics.DrawImage(imageComment, 350, 200, imageComment->GetWidth(), imageComment->GetHeight());
+
+	CString strTimeSeconds;
+
 	if (m_FlagComment == 0)
 	{
 		m_Comment.Format(_T("iThink waiting for command."));
@@ -476,7 +480,13 @@ void CiThinkView::OnPaint()
 	}
 	if (m_FlagComment == 2)
 	{
-		m_Comment.Format(_T("iThink acquiring Neutral data.\n\nConcentrate at 8 Seconds."));
+		strTimeSeconds.Format(_T("%d"), m_TimeSeconds);
+
+		m_Comment.Format(_T("iThink acquiring Neutral data.\n\nConcentrate at "));
+
+		m_Comment.Append(strTimeSeconds);
+
+		m_Comment.Append(_T(" Seconds."));
 	}
 	if (m_FlagComment == 3)
 	{
@@ -484,7 +494,13 @@ void CiThinkView::OnPaint()
 	}
 	if (m_FlagComment == 4)
 	{
-		m_Comment.Format(_T("iThink acquiring Push data.\n\nConcentrate at 8 Seconds."));
+		strTimeSeconds.Format(_T("%d"), m_TimeSeconds);
+
+		m_Comment.Format(_T("iThink acquiring Push data.\n\nConcentrate at "));
+
+		m_Comment.Append(strTimeSeconds);
+
+		m_Comment.Append(_T(" Seconds."));
 	}
 	if (m_FlagComment == 5)
 	{
@@ -492,7 +508,13 @@ void CiThinkView::OnPaint()
 	}
 	if (m_FlagComment == 6)
 	{
-		m_Comment.Format(_T("iThink acquiring Pull data.\n\nConcentrate at 8 Seconds."));
+		strTimeSeconds.Format(_T("%d"), m_TimeSeconds);
+
+		m_Comment.Format(_T("iThink acquiring Pull data.\n\nConcentrate at "));
+
+		m_Comment.Append(strTimeSeconds);
+
+		m_Comment.Append(_T(" Seconds."));
 	}
 	if (m_FlagComment == 7)
 	{
@@ -504,7 +526,13 @@ void CiThinkView::OnPaint()
 	}
 	if (m_FlagComment == 9)
 	{
-		m_Comment.Format(_T("iThink calibrate Cognitiv data.\n\nConcentrate at 10 Seconds."));
+		strTimeSeconds.Format(_T("%d"), m_TimeSeconds);
+
+		m_Comment.Format(_T("iThink calibrate Cognitiv data.\n\nConcentrate at "));
+
+		m_Comment.Append(strTimeSeconds);
+
+		m_Comment.Append(_T(" Seconds."));
 	}
 	if (m_FlagComment == 10)
 	{
@@ -713,6 +741,15 @@ void CiThinkView::OnTimer(UINT_PTR nIDEvent)
 		}
 		if (timeSeconds >= 9 && timeSeconds <= 17)
 		{
+			if (timeSeconds == 9)
+			{
+				m_TimeSeconds = 8;
+			}
+			else
+			{
+				m_TimeSeconds -= 1;
+			}
+
 			m_FlagComment = 2;			
 		}
 		if (timeSeconds >= 18 && timeSeconds <= 26)
@@ -721,6 +758,15 @@ void CiThinkView::OnTimer(UINT_PTR nIDEvent)
 		}
 		if (timeSeconds >= 27 && timeSeconds <= 35)
 		{
+			if (timeSeconds == 27)
+			{
+				m_TimeSeconds = 8;
+			}
+			else
+			{
+				m_TimeSeconds -= 1;
+			}
+
 			m_FlagComment = 4;			
 		}
 		if (timeSeconds >= 36 && timeSeconds <= 44)
@@ -729,6 +775,15 @@ void CiThinkView::OnTimer(UINT_PTR nIDEvent)
 		}
 		if (timeSeconds >= 45 && timeSeconds <= 53)
 		{
+			if (timeSeconds == 45)
+			{
+				m_TimeSeconds = 8;
+			}
+			else
+			{
+				m_TimeSeconds -= 1;
+			}
+
 			m_FlagComment = 6;			
 		}
 		if (timeSeconds >= 54 && timeSeconds <= 62)
@@ -778,6 +833,15 @@ void CiThinkView::OnTimer(UINT_PTR nIDEvent)
 
 			m_Cluster.GetQueueExcitement()->Enqueue(m_Cluster.GetQueueExcitement(), unitExcitement);
 
+
+			if (timeSeconds == 9)
+			{
+				m_TimeSeconds = 10;
+			}
+			else
+			{
+				m_TimeSeconds -= 1;
+			}
 
 			m_FlagComment = 9;
 		}
